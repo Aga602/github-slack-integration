@@ -1,0 +1,17 @@
+name: teat-ci-cd-workflow
+run-name: ${{ github.actor }} is testing out github actions
+on: ["push"]
+jobs:
+  Explore-Github-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "This is triggered by ${{ github.event_name }}"
+      - run: echo "This is running on ${{ runner.os }}"
+      - run: echo "The name of the branch is ${{ github.ref }} on the repo ${{ github.repository }}"
+      - name: Checkout Repo Code
+        uses: actions/checkout@v4
+      - run: echo "Repo ${{ github.repository }} as been cloned to the runner"
+      - name: List of files in the repo
+        run: |
+          ls ${{ github.workspace }}
+      - run: echo "The Job status is ${{ job.status }}"
