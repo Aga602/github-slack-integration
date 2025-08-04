@@ -3,15 +3,8 @@ run-name: ${{ github.actor }} is testing out github actions
 on: ["pull_request"]
 jobs:
   Explore-Github-Actions:
-    permissions:
-      pull-requests: write
     runs-on: ubuntu-latest
     steps:
-      - name: Add Pull Request Reviewer
-        uses: AveryCameronUofR/add-reviewer-gh-action@1.0.3
-        with: 
-          reviewers: "Aga602"
-          token: ${{ secrets.GITHUB_TOKEN }}
       - run: echo "This is triggered by ${{ github.event_name }}"
       - run: echo "This is running on ${{ runner.os }}"
       - run: echo "The name of the branch is ${{ github.ref }} on the repo ${{ github.repository }}"
