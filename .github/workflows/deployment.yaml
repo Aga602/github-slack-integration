@@ -4,8 +4,7 @@ on:
     workflow_run:
         workflows: ["Create/update tag"]
         types: [completed]
-        brnanches: 
-            - main
+
 jobs:
     deploy:
         name: Deploy to Development Environment
