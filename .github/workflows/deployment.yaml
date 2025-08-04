@@ -1,18 +1,16 @@
-
 name: Deploy to Development
 on:
-    workflow_run:
-        workflows: ["Create/update tag"]
-        types: [completed]
+  push:
+    tags:
+      - 'v*'
 
 jobs:
-    deploy:
-        name: Deploy to Development Environment
-        environment: development
-        if: startsWith(github.ref, 'refs/tags/v') &&  ${{ github.event.workflow_run.conclusion == 'success' }}
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v2
-            - name: Deploy application
-              run: echo "Deploying version ${{ github.ref }} to the ${{ github.environment }} environment"
+  deploy:
+    name: Deploy to Development Environment
+    environment: development
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Deploy application
+        run: echo "Deploying version ${{ github.ref }} to the ${{ github.environment }} environment"
