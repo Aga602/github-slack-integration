@@ -12,11 +12,6 @@ jobs:
     environment: development
     runs-on: ubuntu-latest
     steps:
-      - name: Add Pull Request Reviewer
-        uses: AveryCameronUofR/add-reviewer-gh-action@1.0.3
-        with: 
-          reviewers: "AveryCameronUofR"
-          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Fetch latest tag
@@ -27,3 +22,4 @@ jobs:
       - name: Deploy application
         run: |
           echo "Deploying version $TAG_NAME to the ${{ github.environment }} environment"
+    timeout-minutes: 1
