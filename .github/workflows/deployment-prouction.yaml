@@ -10,8 +10,8 @@ on:
 jobs:
   deploy:
     if: ${{  github.event.inputs.version }}
-    name: Deploy to Development Environment
-    environment: development
+    name: Deploy to production Environment
+    environment: production
     runs-on: ubuntu-latest
     steps:
       - name: Regex Match Input
