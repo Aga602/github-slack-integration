@@ -11,12 +11,13 @@ jobs:
         with:
           fetch-depth: 0
       - name: User input semversion
-        uses: actions/github-script@v5
+        uses: mathieudutour/github-tag-action@v6.2
         with:
-          script: |
-            github.rest.git.createRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: 'refs/tags/<0.0.0>',
-              sha: context.sha
-            })
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create a GITHUB release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ step.tag_version.outputs.new_tag}}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}
+          
