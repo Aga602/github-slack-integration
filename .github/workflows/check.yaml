@@ -1,4 +1,6 @@
 name: teat-ci-cd-workflow
+permissions:
+  pull-requests: write
 run-name: ${{ github.actor }} is testing out github actions
 on: ["pull_request"]
 jobs:
