@@ -13,7 +13,7 @@ jobs:
       - name: User input semversion
         uses: mathieudutour/github-tag-action@v6.2
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.TOKEN }}
       - name: Create a GITHUB release
         uses: ncipollo/release-action@v1
         with:
