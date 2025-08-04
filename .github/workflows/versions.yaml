@@ -1,7 +1,8 @@
 name: Create/update tag
 on:
   push:
-    branch: "main"
+    branches: 
+      - main
 jobs:
   create-tag:
     runs-on: ubuntu-latest
@@ -9,17 +10,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: rickstaa/action-create-tag@v1
-        id: "tag_create"
-        with:
-          tag: "latest"
-          tag_exists_error: false
-          message: "Latest release"
-
-      # Print result using the env variable.
-      - run: |
-          echo "Tag already present: ${{ env.TAG_EXISTS }}"
-
-      # Print result using the action output.
-      - run: |
-          echo "Tag already present: ${{ steps.tag_create.outputs.tag_exists }}"
+      - name: Get next sematic version
+        id: semver
+        uses: ActionsDesk/semver@v1
+       
