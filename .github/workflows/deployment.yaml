@@ -26,5 +26,5 @@ jobs:
           fetch-depth: 0
       - name: Deploy application
         run: |
-          echo "Deploying version ${{ github.ref_name }} to the ${{ input.environment }} environment"
+          echo "Deploying version ${{ github.ref_name }} to the ${{ inputs.environment }} environment"
     timeout-minutes: 1
