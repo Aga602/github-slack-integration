@@ -42,4 +42,36 @@ jobs:
       - name: Deploy application
         run: |
           echo "Deploying version $version to the ${{ inputs.environment || 'development' }} environment"
+      - name: Send Slack Notification
+        uses: slackapi/slack-github-action@v1.23.0
+        with:
+          payload: |
+            {
+              "text": "GitHub Workflow Status for ${{ github.repository }}: ${{ job.status }}",
+              "attachments": [
+                {
+                  "color": "${{ job.status == 'success' && 'good' || 'danger' }}",
+                  "fields": [
+                    {
+                      "title": "Workflow",
+                      "value": "${{ github.workflow }}",
+                      "short": true
+                    },
+                    {
+                      "title": "Status",
+                      "value": "${{ job.status }}",
+                      "short": true
+                    },
+                    {
+                      "title": "Commit",
+                      "value": "<${{ github.event.head_commit.url }}|${{ github.sha }}>",
+                      "short": false
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     timeout-minutes: 1
+
