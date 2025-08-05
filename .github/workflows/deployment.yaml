@@ -5,6 +5,9 @@ on:
         environment:
           description: 'Deployment environment'
           required: false
+          options:
+            - development
+            - production
         version:
             description: 'Version to deploy (optional, defaults to latest tag)'
             required: false
