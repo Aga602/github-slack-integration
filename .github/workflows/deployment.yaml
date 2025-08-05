@@ -29,16 +29,17 @@ jobs:
         with:
           fetch-tags: true
           fetch-depth: 0
-      - name: Set version (user input or latest tag)
+      - name: Set version (user input or tag ref)
         id: set_version
         run: |
-            if [ -n "${{ inputs.version }}" ]; then
-              echo "version=${{ inputs.version }}" >> $GITHUB_ENV
-            else
-              git fetch --tags
-              echo "version=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
-            fi
+          if [ -n "${{ inputs.version }}" ]; then
+            echo "version=${{ inputs.version }}" >> $GITHUB_ENV
+          else
+            git fetch --tags
+            TAG=$(git tag --points-at ${{ github.event.workflow_run.head_sha }} | head -n1)
+            echo "version=${TAG}" >> $GITHUB_ENV
+          fi
       - name: Deploy application
         run: |
-          echo "Deploying version $version to the ${{ inputs.environment }} environment"
+          echo "Deploying version $version to the ${{ inputs.environment || 'development' }} environment"
     timeout-minutes: 1
