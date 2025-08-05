@@ -1,0 +1,55 @@
+
+name: build
+on:
+  workflow_run: 
+    workflows: ["Create/update tag"]
+    types:
+      - completed
+  
+jobs:
+  deploy:
+    name: Deploy to Development Environment
+    environment: ${{ inputs.environment || 'development' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-tags: true
+          fetch-depth: 0
+      - name: Deploy application
+        run: |
+          echo "Build is completed and the new tag is created."
+      - name: Send Slack Notification
+        uses: slackapi/slack-github-action@v1.23.0
+        with:
+          payload: |
+            {
+              "text": "GitHub Workflow Status for ${{ github.repository }}: ${{ job.status }}",
+              "attachments": [
+                {
+                  "color": "${{ job.status == 'success' && 'good' || 'danger' }}",
+                  "fields": [
+                    {
+                      "title": "Workflow",
+                      "value": "${{ github.workflow }}",
+                      "short": true
+                    },
+                    {
+                      "title": "Status",
+                      "value": "${{ job.status }}",
+                      "short": true
+                    },
+                    {
+                      "title": "Commit",
+                      "value": "<${{ github.event.head_commit.url }}|${{ github.sha }}>",
+                      "short": false
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+    timeout-minutes: 1
+

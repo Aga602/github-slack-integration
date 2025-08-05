@@ -1,78 +1,56 @@
-
 name: deploy
 on:
-  workflow_dispatch:
-    inputs:
-      environment:
-        description: 'The environment to deploy to'
-        required: false
-        type: choice
-        options:
-          - development
-          - production
-      version:
-        description: 'The version to deploy'
-        required: false
-        type: string
-  workflow_run: 
-    workflows: ["Create/update tag"]
-    types:
-      - completed
-  
+    workflow_dispatch:
+      inputs:
+        environment:
+          description: 'Deployment environment'
+          required: false
+        version:
+            description: 'Version to deploy (optional, defaults to latest tag)'
+            required: false
+            default: 'v0.0.0'
 jobs:
-  deploy:
-    name: Deploy to Development Environment
-    environment: ${{ inputs.environment || 'development' }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-tags: true
-          fetch-depth: 0
-      - name: Set version (user input or tag ref)
-        id: set_version
-        run: |
-          if [ -n "${{ inputs.version }}" ]; then
-            echo "version=${{ inputs.version }}" >> $GITHUB_ENV
-          else
-            git fetch --tags
-            TAG=$(git tag --points-at ${{ github.event.workflow_run.head_sha }} | head -n1)
-            echo "version=${TAG}" >> $GITHUB_ENV
-          fi
-      - name: Deploy application
-        run: |
-          echo "Deploying version $version to the ${{ inputs.environment || 'development' }} environment"
-      - name: Send Slack Notification
-        uses: slackapi/slack-github-action@v1.23.0
-        with:
-          payload: |
-            {
-              "text": "GitHub Workflow Status for ${{ github.repository }}: ${{ job.status }}",
-              "attachments": [
+    deploy:
+        name: Deploy to ${{ inputs.environment || 'development' }} Environment
+        environment: ${{ inputs.environment || 'development' }}
+        runs-on: ubuntu-latest
+        steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+          with:
+            fetch-tags: true
+            fetch-depth: 0
+        - name: Deploy application
+          run: |
+            echo "Build is completed and the new ${{ inputs.version }} is created on environment ${{ inputs.environment }}."
+        - name: Send Slack Notification
+          uses: slackapi/slack-github-action@v1.23.0
+          with:
+            payload: |
                 {
-                  "color": "${{ job.status == 'success' && 'good' || 'danger' }}",
-                  "fields": [
+                "text": "GitHub Workflow Status for ${{ github.repository }}: ${{ job.status }}",
+                "attachments": [
                     {
-                      "title": "Workflow",
-                      "value": "${{ github.workflow }}",
-                      "short": true
-                    },
-                    {
-                      "title": "Status",
-                      "value": "${{ job.status }}",
-                      "short": true
-                    },
-                    {
-                      "title": "Commit",
-                      "value": "<${{ github.event.head_commit.url }}|${{ github.sha }}>",
-                      "short": false
+                    "color": "${{ job.status == 'success' && 'good' || 'danger' }}",
+                    "fields": [
+                        {
+                        "title": "Workflow",
+                        "value": "${{ github.workflow }}",
+                        "short": true
+                        },
+                        {
+                        "title": "Status",
+                        "value": "${{ job.status }}",
+                        "short": true
+                        },
+                        {
+                        "title": "Commit",
+                        "value": "<${{ github.event.head_commit.url }}|${{ github.sha }}>",
+                        "short": false
+                        }
+                    ]
                     }
-                  ]
+                ]
                 }
-              ]
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-    timeout-minutes: 1
-
+          env:
+            SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
