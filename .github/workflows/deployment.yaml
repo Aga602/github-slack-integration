@@ -21,8 +21,6 @@ on:
 jobs:
   deploy:
     name: Deploy to Development Environment
-    env:
-      version: ${{ inputs.version || git describe --tags --abbrev=0 }}
     environment: ${{ inputs.environment || 'development' }}
     runs-on: ubuntu-latest
     steps:
@@ -31,7 +29,16 @@ jobs:
         with:
           fetch-tags: true
           fetch-depth: 0
+      - name: Set version (user input or latest tag)
+        id: set_version
+        run: |
+            if [ -n "${{ inputs.version }}" ]; then
+              echo "version=${{ inputs.version }}" >> $GITHUB_ENV
+            else
+              git fetch --tags
+              echo "version=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+            fi
       - name: Deploy application
         run: |
-          echo "Deploying version ${{ inputs.version }} to the ${{ inputs.environment }} environment"
+          echo "Deploying version $version to the ${{ inputs.environment }} environment"
     timeout-minutes: 1
