@@ -18,6 +18,7 @@ on:
     workflows: ["Create/update tag"]
     types:
       - completed
+  
 jobs:
   deploy:
     name: Deploy to Development Environment
