@@ -17,6 +17,9 @@ on:
     workflows: ["Create/update tag"]
     types:
       - completed
+  push:
+    tags:
+      - 'v*'
 
 jobs:
   deploy:
