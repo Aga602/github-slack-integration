@@ -1,6 +1,6 @@
 
-# Github Slack Integration
+# Github Actions
 
-In this repo we will be playing around with GO, Github actions and Slack app.
+MVP for github actions.
 
 
