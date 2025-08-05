@@ -9,13 +9,20 @@ on:
         options:
           - development
           - production
-  push:
-    tags:
-      - '*'
+      version:
+        description: 'The version to deploy'
+        required: false
+        type: string
+  workflow_run: 
+    workflows: ["Create/update tag"]
+    types:
+      - completed
 
 jobs:
   deploy:
     name: Deploy to Development Environment
+    env:
+      version: ${{ inputs.version || git describe --tags --abbrev=0 }}
     environment: ${{ inputs.environment || 'development' }}
     runs-on: ubuntu-latest
     steps:
@@ -26,5 +33,5 @@ jobs:
           fetch-depth: 0
       - name: Deploy application
         run: |
-          echo "Deploying version ${{ github.ref_name }} to the ${{ inputs.environment }} environment"
+          echo "Deploying version ${{ inputs.version }} to the ${{ inputs.environment }} environment"
     timeout-minutes: 1
