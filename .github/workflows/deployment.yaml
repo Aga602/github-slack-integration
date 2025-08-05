@@ -17,10 +17,6 @@ on:
     workflows: ["Create/update tag"]
     types:
       - completed
-  push:
-    tags:
-      - 'v*'
-
 jobs:
   deploy:
     name: Deploy to Development Environment
