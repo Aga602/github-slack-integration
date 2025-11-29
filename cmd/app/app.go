@@ -34,6 +34,8 @@ func Run() {
 		os.Exit(1)
 	}
 	defer func() {
+		// Ignore sync errors on stdout/stderr which commonly return
+		// "sync /dev/stdout: inappropriate ioctl for device" on some platforms
 		_ = log.Sync()
 	}()
 
@@ -99,8 +101,9 @@ func setupRouter(log *logger.Logger) *chi.Mux {
 	// API routes
 	r.Route("/api/v1", func(r chi.Router) {
 		// Add your API routes here
-		r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+		r.Get("/", func(w http.ResponseWriter, _ *http.Request) {
 			w.Header().Set("Content-Type", "application/json")
+			// Ignore write errors for simple response
 			_, _ = w.Write([]byte(`{"message":"Welcome to the API"}`))
 		})
 	})

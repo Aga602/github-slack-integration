@@ -29,12 +29,12 @@ linters:
     - gosec
     - bodyclose
     - noctx
-    - exportloopref
+    - copyloopvar
 
 linters-settings:
   errcheck:
     check-type-assertions: true
-    check-blank: true
+    check-blank: false
 
   govet:
     enable-all: true

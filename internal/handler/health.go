@@ -25,7 +25,7 @@ type HealthResponse struct {
 }
 
 // Health handles the /health endpoint.
-func (h *HealthHandler) Health(w http.ResponseWriter, r *http.Request) {
+func (h *HealthHandler) Health(w http.ResponseWriter, _ *http.Request) {
 	response := HealthResponse{
 		Status:  "ok",
 		Message: "Service is healthy",
@@ -39,7 +39,7 @@ func (h *HealthHandler) Health(w http.ResponseWriter, r *http.Request) {
 }
 
 // Ready handles the /ready endpoint.
-func (h *HealthHandler) Ready(w http.ResponseWriter, r *http.Request) {
+func (h *HealthHandler) Ready(w http.ResponseWriter, _ *http.Request) {
 	// Add readiness checks here (database connection, external services, etc.)
 	response := HealthResponse{
 		Status:  "ok",

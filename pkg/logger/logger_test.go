@@ -54,7 +54,7 @@ func TestNew(t *testing.T) {
 func TestNewNop(t *testing.T) {
 	log := NewNop()
 	if log == nil {
-		t.Error("NewNop() returned nil logger")
+		t.Fatal("NewNop() returned nil logger")
 	}
 
 	// Should not panic
