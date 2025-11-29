@@ -3,6 +3,30 @@
 # Learn more about .gitignore:
 #     https://www.atlassian.com/git/tutorials/saving-changes/gitignore
 
+# Go build output
+bin/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Go test binary
+*.test
+
+# Go coverage files
+*.out
+coverage.out
+cover.out
+coverage.html
+
+# Go vendor directory (if not using modules)
+# vendor/
+
+# Go workspace files
+go.work
+go.work.sum
+
 # Node artifact files
 node_modules/
 dist/
@@ -21,10 +45,13 @@ dist/
 
 # Maven
 target/
-dist/
 
 # JetBrains IDE
 .idea/
+*.iml
+
+# VSCode
+.vscode/
 
 # Unit test reports
 TEST*.xml
@@ -37,7 +64,6 @@ Thumbs.db
 
 # Applications
 *.app
-*.exe
 *.war
 
 # Large media files
@@ -50,29 +76,31 @@ Thumbs.db
 
 # Built / generated files
 deploy/_output
-*.out
-coverage.html
 
 # Env files
 .env
-
-# Coverage files
-cover.out
-coverage.out
+.env.local
+.env.*.local
 
 # Temporary files
 tmp/
-
-.env
 tmp/*
-coverage.out
 
+# Security
 *.pem
+*.key
 
-# Log
+# Log storage
 storage/log/*
-internal/usecase/storage
-internal/usecase/storage/*
 
+# IDE/Editor specific
+*.swp
+*.swo
+*~
+
+# Debugging
+__debug_bin*
+
+# Task files
 .TODO
 .qodo
