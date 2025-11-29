@@ -52,3 +52,9 @@ func New(level string) (*Logger, error) {
 func NewNop() *Logger {
 	return &Logger{zap.NewNop().Sugar()}
 }
+
+// Sync flushes any buffered log entries.
+// Applications should call Sync before exiting.
+func (l *Logger) Sync() error {
+	return l.SugaredLogger.Sync()
+}

@@ -25,8 +25,8 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
 # Final stage
 FROM alpine:3.19
 
-# Add CA certificates for HTTPS
-RUN apk --no-cache add ca-certificates
+# Add CA certificates and wget for HTTPS and healthcheck
+RUN apk --no-cache add ca-certificates wget
 
 # Create non-root user
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
